@@ -36,9 +36,9 @@ public:
 	}
 };
 
-#ifdef LOCAL
+// #ifdef LOCAL
 int main() {
 	Solution s;
 	return 0;
 }
-#endif
+// #endif

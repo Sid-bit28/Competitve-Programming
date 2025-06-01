@@ -31,14 +31,15 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
-
+	int peakIndexInMountainArray(vector<int>& arr) {
+		int n=arr.size();
+		
 	}
 };
 
-#ifdef LOCAL
+// #ifdef LOCAL
 int main() {
 	Solution s;
 	return 0;
 }
-#endif
+// #endif

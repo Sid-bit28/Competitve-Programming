@@ -24,21 +24,24 @@ template <class T> void prc(T a, T b) {cerr << "["; for (T i = a; i != b; ++i) {
 typedef long long lli;
 typedef pair<lli, lli> ii;    typedef vector<lli> vi;
 typedef vector<ii> vii;       typedef vector<vi> graph;
-bool ckmax(auto &a, auto const& b) {return b > a ? a = b, 1 : 0;}
-bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
+template<class T> bool ckmax(T &a, const T& b) {return b > a ? a = b, 1 : 0;}
+template<class T> bool ckmin(T &a, const T& b) {return b < a ? a = b, 1 : 0;}
 
 int const MOD = 1000000007;
 
-class Solution {
-public:
-	void FunctionDaaloYahan(void) {
+void pre() {
 
-	}
-};
-
-#ifdef LOCAL
-int main() {
-	Solution s;
-	return 0;
 }
-#endif
+
+void solve() {
+
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int t = 1;
+	cin >> t;
+	rep(i, 0, t) solve();
+}
