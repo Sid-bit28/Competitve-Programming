@@ -31,34 +31,39 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	vector<int> fullBloomFlowers(vector<vector<int>> flowers, vector<int> people) {
-		graph arr;
-		for (auto &x : flowers) {
-			arr.push_back({x[0], 0, 0});
-			arr.push_back({x[1], 2, 0});
-		}
-		rep(i, 0, sz(people)) {
-			arr.push_back({people[i], 1, i});
-		}
-		sort(all(arr));
-		int count = 0;
-		vector<int> ans(sz(people));
-		for (auto &x : arr) {
-			if (x[1] == 0) {
-				count++;
-			} else if (x[1] == 1) {
-				ans[x[2]] = count;
-			} else count--;
+	long long maxRunTime(int n, vector<int> batteries) {
+		int nn = sz(batteries);
+
+		auto check = [&](big mid)->bool{
+			big tot = 0;
+			rep(i, 0, nn) {
+				tot += min(mid, 1LL * batteries[i]);
+				if (tot >= (n * 1LL * mid)) {
+					return true;
+				}
+			}
+			return false;
+		};
+
+		big low = 0;
+		big high = 1e15;
+		big ans = low;
+		while (low <= high) {
+			big mid = low + (high - low) / 2;
+			if (check(mid)) {
+				ans = mid;
+				low = mid + 1;
+			} else high = mid - 1;
 		}
 		return ans;
 	}
 };
 
-#ifdef LOCAL
+// #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.fullBloomFlowers({{1, 6}, {3, 7}, {9, 12}, {4, 13}}, {2, 3, 7, 11}) << endl;
-	// cout << s.fullBloomFlowers({{1, 10}, {3, 3}}, {3, 3, 2}) << endl;
+	cout << s.maxRunTime(2, {3, 3, 3}) << endl;
+	cout << s.maxRunTime(2, {1, 1, 1, 1}) << endl;
 	return 0;
 }
-#endif
+// #endif

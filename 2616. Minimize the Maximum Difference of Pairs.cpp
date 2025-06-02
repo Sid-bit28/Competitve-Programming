@@ -31,24 +31,31 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	vector<int> fullBloomFlowers(vector<vector<int>> flowers, vector<int> people) {
-		graph arr;
-		for (auto &x : flowers) {
-			arr.push_back({x[0], 0, 0});
-			arr.push_back({x[1], 2, 0});
-		}
-		rep(i, 0, sz(people)) {
-			arr.push_back({people[i], 1, i});
-		}
-		sort(all(arr));
-		int count = 0;
-		vector<int> ans(sz(people));
-		for (auto &x : arr) {
-			if (x[1] == 0) {
-				count++;
-			} else if (x[1] == 1) {
-				ans[x[2]] = count;
-			} else count--;
+	int minimizeMax(vector<int> &nums, int p) {
+		int n = sz(nums);
+
+		sort(all(nums));
+
+		auto check = [&](int mid)->bool{
+			int tot = 0;
+			rep(i, 0, n - 1) {
+				if (abs(nums[i] - nums[i + 1]) <= mid) {
+					tot++;
+					i++;
+				}
+			}
+			return tot >= p;
+		};
+
+		int low = 0;
+		int high = nums[n - 1] - nums[0];
+		int ans = high;
+		while (low <= high) {
+			int mid = (low + high) / 2;
+			if (check(mid)) {
+				ans = mid;
+				high = mid - 1;
+			} else low = mid + 1;
 		}
 		return ans;
 	}
@@ -57,8 +64,8 @@ public:
 #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.fullBloomFlowers({{1, 6}, {3, 7}, {9, 12}, {4, 13}}, {2, 3, 7, 11}) << endl;
-	// cout << s.fullBloomFlowers({{1, 10}, {3, 3}}, {3, 3, 2}) << endl;
+	// cout << s.minimizeMax({10, 1, 2, 7, 1, 3}, 2) << endl;
+	// cout << s.minimizeMax({4, 2, 1, 2}, 1) << endl;
 	return 0;
 }
 #endif

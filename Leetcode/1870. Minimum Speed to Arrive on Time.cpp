@@ -21,8 +21,8 @@ template <class T> void dbs(string str, T t) {cerr << str << " : " << t << "\n";
 template <class T, class... S> void dbs(string str, T t, S... s) {int idx = str.find(','); cerr << str.substr(0, idx) << " : " << t << ","; dbs(str.substr(idx + 1), s...);}
 template <class T> void prc(T a, T b) {cerr << "["; for (T i = a; i != b; ++i) {if (i != a) cerr << ", "; cerr << *i;} cerr << "]\n";}
 
-typedef long long big;
-typedef pair<big, big> ii;    typedef vector<big> vi;
+typedef long long lli;
+typedef pair<lli, lli> ii;    typedef vector<lli> vi;
 typedef vector<ii> vii;       typedef vector<vi> graph;
 bool ckmax(auto &a, auto const& b) {return b > a ? a = b, 1 : 0;}
 bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
@@ -31,34 +31,38 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	vector<int> fullBloomFlowers(vector<vector<int>> flowers, vector<int> people) {
-		graph arr;
-		for (auto &x : flowers) {
-			arr.push_back({x[0], 0, 0});
-			arr.push_back({x[1], 2, 0});
+	int minSpeedOnTime(vector<int> dist, double hour) {
+		int n = sz(dist);
+
+		auto check = [&](int mid)->double{
+			double time = 0.0;
+			rep(i, 0, n - 1) {
+				double t = (double)dist[i] / (double)mid;
+				time += ceil(t);
+			}
+			time += (double)dist[n - 1] / (double)mid;
+			return time;
+		};
+
+		int low = 1;
+		int high = 1e7;
+		int minSpeed = -1;
+		while (low <= high) {
+			cout << mid << endl;
+			int mid = (low + high) / 2;
+			if (check(mid) <= hour) {
+				minSpeed = mid;
+				high = mid - 1;
+			} else low = mid + 1;
 		}
-		rep(i, 0, sz(people)) {
-			arr.push_back({people[i], 1, i});
-		}
-		sort(all(arr));
-		int count = 0;
-		vector<int> ans(sz(people));
-		for (auto &x : arr) {
-			if (x[1] == 0) {
-				count++;
-			} else if (x[1] == 1) {
-				ans[x[2]] = count;
-			} else count--;
-		}
-		return ans;
+		return minSpeed;
 	}
 };
 
-#ifdef LOCAL
+// #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.fullBloomFlowers({{1, 6}, {3, 7}, {9, 12}, {4, 13}}, {2, 3, 7, 11}) << endl;
-	// cout << s.fullBloomFlowers({{1, 10}, {3, 3}}, {3, 3, 2}) << endl;
+	cout << s.minSpeedOnTime({1, 3, 2}, 6.0) << endl;
 	return 0;
 }
-#endif
+// #endif
