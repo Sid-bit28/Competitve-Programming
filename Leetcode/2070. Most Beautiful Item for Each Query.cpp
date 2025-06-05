@@ -31,30 +31,23 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	int minimumSize(vector<int> &nums, int maxOperations) {
-		int n = sz(nums);
-
-		auto check = [&](int mid)->bool{
-			int tot = 0;
-			rep(i, 0, n) {
-				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
-				}
-				if (tot > maxOperations) {
-					return false;
-				}
+	vector<int> maximumBeauty(vector<vector<int>> &items, vector<int> &queries) {
+		int n = sz(items);
+		sort(all(items));
+		vii arr;
+		rep(i, 0, sz(queries)) {
+			arr.emplace_back(queries[i], i);
+		}
+		sort(all(arr));
+		vector<int> ans(sz(queries));
+		int i = 0;
+		int mx = 0;
+		for (auto &x : arr) {
+			while (i < n && items[i][0] <= x.F) {
+				ckmax(mx, items[i][1]);
+				i++;
 			}
-			return true;
-		};
-		int low = 1;
-		int high = *max_element(all(nums));
-		int ans = 1;
-		while (low <= high) {
-			int mid = (low + high) / 2;
-			if (check(mid)) {
-				ans = mid;
-				high = mid - 1;
-			} else low = mid + 1;
+			ans[x.S] = mx;
 		}
 		return ans;
 	}
@@ -63,8 +56,8 @@ public:
 #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.minimumSize({9}, 2) << endl;
-	// cout << s.minimumSize({2, 4, 8, 2}, 4) << endl;
+	// auto ans = s.maximumBeauty({{1, 2}, {3, 2}, {2, 4}, {5, 6}, {3, 5}}, {1, 2, 3, 4, 5, 6});
+	// pr(ans);
 	return 0;
 }
 #endif

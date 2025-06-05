@@ -31,40 +31,33 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	int minimumSize(vector<int> &nums, int maxOperations) {
+	int specialArray(vector<int> &nums) {
 		int n = sz(nums);
+		sort(all(nums));
 
-		auto check = [&](int mid)->bool{
-			int tot = 0;
-			rep(i, 0, n) {
-				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
-				}
-				if (tot > maxOperations) {
-					return false;
-				}
-			}
-			return true;
-		};
-		int low = 1;
-		int high = *max_element(all(nums));
-		int ans = 1;
+		int low = 0;
+		int high = n;
 		while (low <= high) {
 			int mid = (low + high) / 2;
-			if (check(mid)) {
-				ans = mid;
-				high = mid - 1;
-			} else low = mid + 1;
+			int idx = lower_bound(all(nums), mid) - begin(nums);
+			int count = n - idx;
+			if (count == mid) {
+				return mid;
+			} else if (count > mid) {
+				low = mid + 1;
+			} else high = mid - 1;
 		}
-		return ans;
+		return -1;
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.minimumSize({9}, 2) << endl;
-	// cout << s.minimumSize({2, 4, 8, 2}, 4) << endl;
+	// cout << s.specialArray({3, 5}) << endl;
+	// cout << s.specialArray({0, 0}) << endl;
+	// cout << s.specialArray({0, 4, 3, 0, 4}) << endl;
+	// cout << s.specialArray({1, 0, 0, 6, 4, 9}) << endl;
 	return 0;
 }
 #endif

@@ -31,24 +31,21 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	int minimumSize(vector<int> &nums, int maxOperations) {
-		int n = sz(nums);
+	int minimizedMaximum(int n, vector<int> &quantities) {
+		int m = sz(quantities);
 
 		auto check = [&](int mid)->bool{
 			int tot = 0;
-			rep(i, 0, n) {
-				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
-				}
-				if (tot > maxOperations) {
-					return false;
-				}
+			rep(i, 0, m) {
+				tot += (quantities[i] + mid - 1) / mid;
 			}
-			return true;
+			// pr(mid, tot);
+			return tot <= n;
 		};
+
 		int low = 1;
-		int high = *max_element(all(nums));
-		int ans = 1;
+		int high = *max_element(all(quantities));
+		int ans = high;
 		while (low <= high) {
 			int mid = (low + high) / 2;
 			if (check(mid)) {
@@ -63,8 +60,9 @@ public:
 #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.minimumSize({9}, 2) << endl;
-	// cout << s.minimumSize({2, 4, 8, 2}, 4) << endl;
+	// cout << s.minimizedMaximum(6, {11, 6}) << endl;
+	// cout << s.minimizedMaximum(7, {15, 10, 10}) << endl;
+	// cout << s.minimizedMaximum(1, {10000}) << endl;
 	return 0;
 }
 #endif

@@ -31,24 +31,27 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	int minimumSize(vector<int> &nums, int maxOperations) {
+	int smallestDistancePair(vector<int> &nums, int k) {
 		int n = sz(nums);
 
+		sort(all(nums));
+
 		auto check = [&](int mid)->bool{
-			int tot = 0;
-			rep(i, 0, n) {
-				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
-				}
-				if (tot > maxOperations) {
-					return false;
+			int i = 0, j = 0, count = 0;
+			while (i < n || j < n) {
+				while (j < n && nums[j] - nums[i] <= mid) j++;
+				count += j - i - 1;
+				i++;
+				if (count >= k) {
+					return true;
 				}
 			}
-			return true;
+			return false;
 		};
-		int low = 1;
-		int high = *max_element(all(nums));
-		int ans = 1;
+
+		int low = 0;
+		int high = nums[n - 1] - nums[0];
+		int ans = -1;
 		while (low <= high) {
 			int mid = (low + high) / 2;
 			if (check(mid)) {
@@ -63,8 +66,10 @@ public:
 #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.minimumSize({9}, 2) << endl;
-	// cout << s.minimumSize({2, 4, 8, 2}, 4) << endl;
+	// cout << s.smallestDistancePair({1, 3, 1}, 	1) << endl;
+	// cout << s.smallestDistancePair({1, 1, 1}, 	2) << endl;
+	// cout << s.smallestDistancePair({1, 6, 1}, 	3) << endl;
+	// cout << s.smallestDistancePair({1, 3, 5, 8, 13, 9}, 	4) << endl;
 	return 0;
 }
 #endif

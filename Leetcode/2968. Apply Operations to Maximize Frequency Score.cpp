@@ -31,40 +31,62 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	int minimumSize(vector<int> &nums, int maxOperations) {
+	int maxFrequencyScore(vector<int> &nums, long long k) {
 		int n = sz(nums);
 
-		auto check = [&](int mid)->bool{
-			int tot = 0;
-			rep(i, 0, n) {
-				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
-				}
-				if (tot > maxOperations) {
-					return false;
-				}
+		sort(all(nums));
+		vi pre(n, 0);
+		rep(i, 0, n) {
+			pre[i] = nums[i];
+			if (i) {
+				pre[i] += pre[i - 1];
 			}
-			return true;
+		}
+
+		auto check = [&](int mid)->bool{
+			int i = 0;
+			int j = mid - 1;
+			while (j < n) {
+				int tar_id = (i + j) / 2;
+				int target = nums[tar_id];
+				int o_l = 0;
+				int o_r = 0;
+				if (tar_id == 0) {
+					o_l = 0;
+				} else {
+					o_l = ((tar_id - i) * target) - (pre[tar_id - 1] - (i > 0 ? pre[i - 1] : 0));
+				}
+
+				o_r = abs(((j - tar_id) * target) - (pre[j] - pre[tar_id]));
+				// pr(mid, o_l, o_r);
+				if (o_l + o_r <= k) {
+					return true;
+				}
+				i++;
+				j++;
+			}
+			return false;
 		};
+
+
 		int low = 1;
-		int high = *max_element(all(nums));
+		int high = n;
 		int ans = 1;
 		while (low <= high) {
 			int mid = (low + high) / 2;
 			if (check(mid)) {
 				ans = mid;
-				high = mid - 1;
-			} else low = mid + 1;
+				low = mid + 1;
+			} else high = mid - 1;
 		}
 		return ans;
 	}
 };
 
-#ifdef LOCAL
+// #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.minimumSize({9}, 2) << endl;
-	// cout << s.minimumSize({2, 4, 8, 2}, 4) << endl;
+	// cout << s.maxFrequencyScore({1, 2, 6, 4}, 3) << endl;
 	return 0;
 }
-#endif
+// #endif

@@ -21,8 +21,8 @@ template <class T> void dbs(string str, T t) {cerr << str << " : " << t << "\n";
 template <class T, class... S> void dbs(string str, T t, S... s) {int idx = str.find(','); cerr << str.substr(0, idx) << " : " << t << ","; dbs(str.substr(idx + 1), s...);}
 template <class T> void prc(T a, T b) {cerr << "["; for (T i = a; i != b; ++i) {if (i != a) cerr << ", "; cerr << *i;} cerr << "]\n";}
 
-typedef long long big;
-typedef pair<big, big> ii;    typedef vector<big> vi;
+typedef long long lli;
+typedef pair<lli, lli> ii;    typedef vector<lli> vi;
 typedef vector<ii> vii;       typedef vector<vi> graph;
 bool ckmax(auto &a, auto const& b) {return b > a ? a = b, 1 : 0;}
 bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
@@ -31,30 +31,32 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	int minimumSize(vector<int> &nums, int maxOperations) {
-		int n = sz(nums);
+	int maxDistance(vector<int>& arr, int m) {
+		int n = sz(arr);
+		sort(all(arr));
 
-		auto check = [&](int mid)->bool{
-			int tot = 0;
-			rep(i, 0, n) {
-				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
-				}
-				if (tot > maxOperations) {
-					return false;
+		auto check = [&](lli mid)->bool{
+			lli cnt = m - 1;
+			lli last = 0;
+			rep(i, 1, n) {
+				if (arr[i] - arr[last] >= mid) {
+					last = i;
+					cnt--;
+					if (cnt == 0)return true;
 				}
 			}
-			return true;
+			return false;
 		};
-		int low = 1;
-		int high = *max_element(all(nums));
-		int ans = 1;
+
+		lli low = 1;
+		lli high = 1e9 + 100;
+		lli ans = low;
 		while (low <= high) {
-			int mid = (low + high) / 2;
+			lli mid = (high + low) / 2;
 			if (check(mid)) {
 				ans = mid;
-				high = mid - 1;
-			} else low = mid + 1;
+				low = mid + 1;
+			} else high = mid - 1;
 		}
 		return ans;
 	}
@@ -63,8 +65,6 @@ public:
 #ifdef LOCAL
 int main() {
 	Solution s;
-	// cout << s.minimumSize({9}, 2) << endl;
-	// cout << s.minimumSize({2, 4, 8, 2}, 4) << endl;
 	return 0;
 }
 #endif

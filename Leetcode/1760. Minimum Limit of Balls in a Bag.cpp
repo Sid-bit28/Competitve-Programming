@@ -38,7 +38,7 @@ public:
 			int tot = 0;
 			rep(i, 0, n) {
 				if (nums[i] > mid) {
-					tot += (nums[i] / mid);
+					tot += ((nums[i] + mid - 1) / mid) - 1;
 				}
 				if (tot > maxOperations) {
 					return false;
