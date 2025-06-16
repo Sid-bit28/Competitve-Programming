@@ -21,8 +21,8 @@ template <class T> void dbs(string str, T t) {cerr << str << " : " << t << "\n";
 template <class T, class... S> void dbs(string str, T t, S... s) {int idx = str.find(','); cerr << str.substr(0, idx) << " : " << t << ","; dbs(str.substr(idx + 1), s...);}
 template <class T> void prc(T a, T b) {cerr << "["; for (T i = a; i != b; ++i) {if (i != a) cerr << ", "; cerr << *i;} cerr << "]\n";}
 
-typedef long long big;
-typedef pair<big, big> ii;    typedef vector<big> vi;
+typedef long long lli;
+typedef pair<lli, lli> ii;    typedef vector<lli> vi;
 typedef vector<ii> vii;       typedef vector<vi> graph;
 bool ckmax(auto &a, auto const& b) {return b > a ? a = b, 1 : 0;}
 bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
@@ -31,8 +31,29 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	bool rotateString(string s, string goal) {
+		goal += goal;
 
+		int m = sz(s);
+
+		s += "#";
+		s += goal;
+
+		int n = sz(s);
+		int lps[n + 1];
+		int i = 0, j = -1;
+		lps[0] = -1;
+		while (i < n) {
+			while (j != -1 && s[i] != s[j])j = lps[j];
+			i++; j++; lps[i] = j;
+		}
+
+		rep(i, 0, n) {
+			if (lps[i] == m) {
+				return true;
+			}
+		}
+		return false;
 	}
 };
 

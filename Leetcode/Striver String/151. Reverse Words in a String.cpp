@@ -31,8 +31,29 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	string reverseWords(string s) {
+		int n = sz(s);
 
+		string ans;
+		string foo;
+		for (int i = n - 1; i >= 0; i--) {
+			if (s[i] == ' ') {
+				reverse(all(foo));
+				if (sz(foo)) {
+					if (sz(ans))ans.push_back(' ');
+					ans += foo;
+				}
+				foo.clear();
+			} else {
+				foo.push_back(s[i]);
+			}
+		}
+		reverse(all(foo));
+		if (sz(foo)) {
+			if (sz(ans))ans.push_back(' ');
+			ans += foo;
+		}
+		return ans;
 	}
 };
 

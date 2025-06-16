@@ -31,8 +31,78 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	struct trieNode {
+		trieNode* left;
+		trieNode* right;
+	};
 
+	trieNode* getNode() {
+		trieNode* temp = new trieNode;
+		temp->left = NULL;
+		temp->right = NULL;
+		return temp;
+	}
+
+	void insert(int num, trieNode* root) {
+		trieNode* temp = root;
+		for (int bit = 31; bit >= 0; bit--) {
+			if ((num >> bit) & 1) {
+				if (temp->right == NULL) {
+					temp->right = getNode();
+				}
+				temp = temp->right;
+			} else {
+				if (temp->left == NULL) {
+					temp->left = getNode();
+				}
+				temp = temp->left;
+			}
+		}
+	}
+	vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+		int n = sz(nums);
+		int m = sz(queries);
+		rep(i, 0, m) {
+			queries[i].push_back(i);
+		}
+
+		auto cmp = [&](vector<int> a, vector<int> b)->bool{
+			return a[1] < b[1];
+		};
+		sort(all(queries), cmp);
+		sort(all(nums));
+
+		trieNode* root = getNode();
+
+		vector<int> foo(m);
+		int idx = -1;
+		rep(i, 0, m) {
+			int ans = 0;
+			trieNode* temp = root;
+			while (idx + 1 < n && nums[idx + 1] <= queries[i][1]) {
+				insert(nums[idx + 1], root);
+				idx++;
+			}
+			if (idx == -1) {
+				foo[queries[i][2]] = -1;
+				continue;
+			}
+			for (int bit = 31; bit >= 0; bit--) {
+				if (queries[i][0] >> bit & 1) {
+					if (temp->left != NULL) {
+						ans += (1 << bit);
+						temp = temp->left;
+					} else temp = temp->right;
+				} else {
+					if (temp->right != NULL) {
+						ans += (1 << bit);
+						temp = temp->right;
+					} else temp = temp->right;
+				}
+			}
+			foo[queries[i][2]] = ans;
+		}
+		return foo;
 	}
 };
 

@@ -6,7 +6,6 @@ using namespace std;
 #define all(x) std::begin(x), std::end(x)
 #define sz(x) (int)(x).size()
 #define rep(i, a, b) for(long long i = a; i < (b); ++i)
-#define endl '\n'
 #define debarr(a, n) cerr << #a << " : ";for(int i = 0; i < n; i++) cerr << a[i] << " "; cerr << endl;
 #define debmat(mat, row, col) cerr << #mat << " :\n";for(int i = 0; i < row; i++) {for(int j = 0; j < col; j++) cerr << mat[i][j] << " ";cerr << endl;}
 #define pr(...) dbs(#__VA_ARGS__, __VA_ARGS__)
@@ -31,14 +30,44 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	long long maximumProfit(vector<int> &prices, int k) {
+		big n = sz(prices);
 
+		vector<vector<vector<big>>> dp(n, vector<vector<big>>(k + 1, vector<big>(3, -1)));
+		auto rec = [&](auto && rec, int pos, int transactions, int type)->big{
+			if (pos == n) {
+				if (type == 2) {
+					return 0;
+				}
+				return -1e17;
+			}
+
+			if (dp[pos][transactions][type] != -1) {
+				return dp[pos][transactions][type];
+			}
+
+			big ans = rec(rec, pos + 1, transactions, type);
+			if (type == 2) {
+				if (transactions < k) {
+					// khareed liya
+					ans = max(ans, rec(rec, pos + 1, transactions, 0) - prices[pos]);
+					ans = max(ans, rec(rec, pos + 1, transactions, 1) + prices[pos]);
+				}
+			} else if (type == 0) {
+				ans = max(ans, prices[pos] + rec(rec, pos + 1, transactions + 1, 2));
+			} else ans = max(ans, -prices[pos] + rec(rec, pos + 1, transactions + 1, 2));
+			return dp[pos][transactions][type] = ans;
+		};
+		big ans = rec(rec, 0, 0, 2);
+		return ans;
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
+	// cout << s.maximumProfit({1, 7, 9, 8, 2}, 2) << endl;
+	// cout << s.maximumProfit({12, 16, 19, 19, 8, 1, 19, 13, 9}, 3) << endl;
 	return 0;
 }
 #endif

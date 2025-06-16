@@ -31,14 +31,36 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
-
+	vector<int> searchRange(vector<int> &nums, int target) {
+		int n = sz(nums);
+		auto binSearch = [&](int target)->int{
+			int low = 0;
+			int high = n - 1;
+			int ans = n;
+			while (low <= high) {
+				int mid = (low + high) / 2;
+				if (nums[mid] >= target) {
+					ans = mid;
+					high = mid - 1;
+				} else low = mid + 1;
+			}
+			return ans;
+		};
+		int idx1 = binSearch(target);
+		if (idx1 == n || nums[idx1] != target) {
+			return { -1, -1};
+		}
+		int idx2 = binSearch(target + 1);
+		return {idx1, idx2 - 1};
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
+	// cout << s.searchRange({5, 7, 7, 8, 8, 10}, 8) << endl;
+	// cout << s.searchRange({5, 7, 7, 8, 8, 10}, 6) << endl;
+	// cout << s.searchRange({}, 0) << endl;
 	return 0;
 }
 #endif

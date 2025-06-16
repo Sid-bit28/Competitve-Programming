@@ -6,7 +6,6 @@ using namespace std;
 #define all(x) std::begin(x), std::end(x)
 #define sz(x) (int)(x).size()
 #define rep(i, a, b) for(long long i = a; i < (b); ++i)
-#define endl '\n'
 #define debarr(a, n) cerr << #a << " : ";for(int i = 0; i < n; i++) cerr << a[i] << " "; cerr << endl;
 #define debmat(mat, row, col) cerr << #mat << " :\n";for(int i = 0; i < row; i++) {for(int j = 0; j < col; j++) cerr << mat[i][j] << " ";cerr << endl;}
 #define pr(...) dbs(#__VA_ARGS__, __VA_ARGS__)
@@ -31,14 +30,58 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	struct trieNode {
+		bool endOfWord;
+		trieNode* children[26];
+	};
 
+	trieNode* getNode() {
+		trieNode* temp = new trieNode;
+		temp->endOfWord = false;
+		for (int i = 0; i < 26; i++) {
+			temp->children[i] = NULL;
+		}
+		return temp;
+	}
+
+	void insert(string s, trieNode* root) {
+		trieNode* temp = root;
+		for (auto &x : s) {
+			if (temp->children[x - 'a'] == NULL) {
+				temp->children[x - 'a'] = getNode();
+			}
+			temp = temp->children[x - 'a'];
+		}
+		temp->endOfWord = true;
+	}
+
+	bool find(string s, trieNode* root) {
+		trieNode* temp = root;
+		for (auto &x : s) {
+			temp = temp->children[x - 'a'];
+			if (temp->endOfWord == false) {
+				return false;
+			}
+		}
+		return true;
+	}
+	string longestValidWord(vector<string>& words) {
+		int n = sz(words);
+		trieNode* root = getNode();
+		for (auto &x : words) {
+			insert(x, root);
+		}
+
+		sort(all(words));
+
+		string ans = "";
+		for (auto &x : words) {
+			if (find(x, root)) {
+				if ((int)x.length() > (int)ans.length()) {
+					ans = x;
+				}
+			}
+		}
+		return ans;
 	}
 };
-
-#ifdef LOCAL
-int main() {
-	Solution s;
-	return 0;
-}
-#endif

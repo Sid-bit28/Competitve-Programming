@@ -31,8 +31,15 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	string largestOddNumber(string num) {
+		int n = sz(num);
 
+		for (int i = n - 1; i >= 0; i--) {
+			if ((num[i] - '0') % 2) {
+				return num.substr(0, i + 1);
+			}
+		}
+		return "";
 	}
 };
 

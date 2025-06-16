@@ -6,7 +6,6 @@ using namespace std;
 #define all(x) std::begin(x), std::end(x)
 #define sz(x) (int)(x).size()
 #define rep(i, a, b) for(long long i = a; i < (b); ++i)
-#define endl '\n'
 #define debarr(a, n) cerr << #a << " : ";for(int i = 0; i < n; i++) cerr << a[i] << " "; cerr << endl;
 #define debmat(mat, row, col) cerr << #mat << " :\n";for(int i = 0; i < row; i++) {for(int j = 0; j < col; j++) cerr << mat[i][j] << " ";cerr << endl;}
 #define pr(...) dbs(#__VA_ARGS__, __VA_ARGS__)
@@ -31,14 +30,39 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	int maxSumDistinctTriplet(vector<int>& x, vector<int>& y) {
+		int n = sz(x);
 
+		map<int, int> mp;
+		rep(i, 0, n) {
+			if (mp.find(x[i]) == mp.end()) {
+				mp[x[i]] = y[i];
+			} else mp[x[i]] = max(mp[x[i]], y[i]);
+		}
+
+		if (sz(mp) < 3) {
+			return -1;
+		}
+
+		vector<int> arr;
+		for (auto &x : mp) {
+			arr.push_back(x.S);
+		}
+		sort(all(arr));
+		int ans = 0;
+		rep(i, 0, 3) {
+			ans += arr.back();
+			arr.pop_back();
+		}
+		return ans;
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
+	// cout << s.maxSumDistinctTriplet({1, 2, 1, 3, 2}, {5, 3, 4, 6, 2}) << endl;
+	// cout << s.maxSumDistinctTriplet({1, 2, 1, 2}, {4, 5, 6, 7}) << endl;
 	return 0;
 }
 #endif

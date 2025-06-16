@@ -31,8 +31,44 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	int ans = 0;
+	struct trieNode {
+		int count;
+		trieNode* children[26];
+	};
 
+	trieNode* getNode() {
+		trieNode* temp = new trieNode();
+		temp->count = 0;
+		rep(i, 0, 26) {
+			temp->children[i] = NULL;
+		}
+		return temp;
+	}
+
+	void insert(trieNode* root, string s, int len) {
+		trieNode* temp = root;
+		rep(i, 0, sz(s)) {
+			if (temp->children[s[i] - 'a'] == NULL) {
+				temp->children[s[i] - 'a'] = getNode();
+			}
+			temp = temp->children[s[i] - 'a'];
+			temp->count++;
+			if (temp->count == len) {
+				ckmax(ans, i + 1);
+			}
+		}
+	}
+
+
+	string longestCommonPrefix(vector<string>& strs) {
+		trieNode* root = getNode();
+		for (auto &x : strs) {
+			insert(root, x, sz(strs));
+		}
+		// cout << ans << endl;
+		string foo = strs[0].substr(0, ans);
+		return foo;
 	}
 };
 

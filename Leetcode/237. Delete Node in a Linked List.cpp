@@ -31,8 +31,15 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
-
+	void deleteNode(ListNode* node) {
+		ListNode* prev = NULL;
+		while (node != NULL && node->next != NULL) {
+			node->val = node->next->val;
+			prev = node;
+			node = node->next;
+		}
+		prev->next = null;
+		delete(node);
 	}
 };
 
@@ -41,4 +48,4 @@ int main() {
 	Solution s;
 	return 0;
 }
-#endif
+#endifs

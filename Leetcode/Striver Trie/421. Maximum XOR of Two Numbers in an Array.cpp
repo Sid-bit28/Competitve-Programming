@@ -31,14 +31,70 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	struct trieNode {
+		trieNode* left;
+		trieNode* right;
+	};
 
+	trieNode* getNode() {
+		trieNode* temp = new trieNode;
+		temp->left = NULL;
+		temp->right = NULL;
+		return temp;
+	}
+
+	void insert(int num, trieNode* root) {
+		trieNode* temp = root;
+		for (int bit = 31; bit >= 0; bit--) {
+			if ((num >> bit) & 1) {
+				if (temp->right == NULL) {
+					temp->right = getNode();
+				}
+				temp = temp->right;
+			} else {
+				if (temp->left == NULL) {
+					temp->left = getNode();
+				}
+				temp = temp->left;
+			}
+		}
+	}
+	int findMaximumXOR(vector<int>& nums) {
+		int n = sz(nums);
+
+		trieNode* root = getNode();
+		for (auto &x : nums) {
+			insert(x, root);
+		}
+
+		int foo = 0;
+		rep(i, 0, n) {
+			trieNode* temp = root;
+			int ans = 0;
+			for (int bit = 31; bit >= 0; bit--) {
+				if ((nums[i] >> bit) & 1) {
+					if (temp->left != NULL) {
+						ans += (1 << bit);
+						temp = temp->left;
+					} else temp = temp->right;
+				} else {
+					if (temp->right != NULL) {
+						ans += (1 << bit);
+						temp = temp->right;
+					} else temp = temp->left;
+				}
+			}
+			ckmax(foo, ans);
+		}
+		return foo;
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
+	// cout << s.findMaximumXOR({3, 10, 5, 25, 2, 8}) << endl;
+	// cout << s.findMaximumXOR({14, 70, 53, 83, 49, 91, 36, 80, 92, 51, 66, 70}) << endl;
 	return 0;
 }
 #endif

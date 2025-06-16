@@ -31,8 +31,24 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
-
+	bool isIsomorphic(string s, string t) {
+		int n = sz(s);
+		map<char, char> mp, mpp;
+		rep(i, 0, n) {
+			if (mp.find(s[i]) != mp.end()) {
+				if (mp[s[i]] != t[i]) {
+					return false;
+				}
+			} else if (mpp.find(t[i]) != mpp.end()) {
+				if (mpp[t[i]] != s[i]) {
+					return false;
+				}
+			} else {
+				mp[s[i]] = t[i];
+				mpp[t[i]] = s[i];
+			}
+		}
+		return true;
 	}
 };
 

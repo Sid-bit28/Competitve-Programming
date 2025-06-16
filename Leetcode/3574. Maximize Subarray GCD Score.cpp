@@ -6,7 +6,6 @@ using namespace std;
 #define all(x) std::begin(x), std::end(x)
 #define sz(x) (int)(x).size()
 #define rep(i, a, b) for(long long i = a; i < (b); ++i)
-#define endl '\n'
 #define debarr(a, n) cerr << #a << " : ";for(int i = 0; i < n; i++) cerr << a[i] << " "; cerr << endl;
 #define debmat(mat, row, col) cerr << #mat << " :\n";for(int i = 0; i < row; i++) {for(int j = 0; j < col; j++) cerr << mat[i][j] << " ";cerr << endl;}
 #define pr(...) dbs(#__VA_ARGS__, __VA_ARGS__)
@@ -31,14 +30,44 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
+	long long maxGCDScore(vector<int> &nums, int k) {
+		big n = sz(nums);
 
+		vector<big> f(n, 0);
+		rep(i, 0, n) {
+			int temp = nums[i];
+			int count = 0;
+			while (temp % 2 == 0) {
+				count++;
+				temp /= 2;
+			}
+			f[i] = count;
+		}
+
+		big ans = 0;
+		rep(i, 0, n) {
+			big gcd = nums[i];
+			map<int, int> mp;
+			rep(j, i, n) {
+				gcd = __gcd(gcd, 1LL * nums[j]);
+				mp[f[j]]++;
+				auto it = mp.begin();
+				if ((*it).S <= k) {
+					ckmax(ans, (j - i + 1) * gcd * 2);
+				} else ckmax(ans, (j - i + 1) * gcd);
+			}
+		}
+		return ans;
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
+	// cout << s.maxGCDScore({2, 4}, 1) << endl;
+	// cout << s.maxGCDScore({3, 5, 7}, 2) << endl;
+	// cout << s.maxGCDScore({4, 8, 32, 4, 16}, 2) << endl;
+	// cout << s.maxGCDScore({5, 5, 5}, 1) << endl;
 	return 0;
 }
 #endif
