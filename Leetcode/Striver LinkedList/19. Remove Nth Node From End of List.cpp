@@ -31,38 +31,36 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
-		if (head->next == NULL) {
-			return NULL;
-		}
-		ListNode* temp = head;
-		ListNode* curr = NULL;
-		ListNode* prev = NULL;
-		int count = 0;
-		while (count < n) {
-			count++;
-			temp = temp->next;
-		}
-		curr = head;
-		while (temp != NULL) {
-			temp = temp->next;
-			prev = curr;
-			curr = curr->next;
-		}
-		if (curr == head) {
-			head = curr->next;
-			delete(curr);
-			return head;
-		}
-		prev->next = curr->next;
-		delete(curr);
-		return head;
-	}
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode dummy(0);          // dummy node to simplify edge cases
+        dummy.next = head;
+
+        ListNode* fast = &dummy;
+        ListNode* slow = &dummy;
+
+        // Move fast pointer n+1 steps ahead
+        for (int i = 0; i <= n; ++i) {
+            fast = fast->next;
+        }
+
+        // Move both fast and slow until fast reaches the end
+        while (fast) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+
+        // Remove the nth node from end
+        ListNode* toDelete = slow->next;
+        slow->next = slow->next->next;
+        delete toDelete;
+
+        return dummy.next;
+    }
 };
 
 #ifdef LOCAL
 int main() {
-	Solution s;
-	return 0;
+    Solution s;
+    return 0;
 }
 #endif

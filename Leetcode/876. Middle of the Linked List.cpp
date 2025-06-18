@@ -31,32 +31,18 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
-		if (head->next == NULL) {
-			return NULL;
-		}
-		ListNode* temp = head;
-		ListNode* curr = NULL;
-		ListNode* prev = NULL;
-		int count = 0;
-		while (count < n) {
-			count++;
-			temp = temp->next;
-		}
-		curr = head;
-		while (temp != NULL) {
-			temp = temp->next;
-			prev = curr;
-			curr = curr->next;
-		}
-		if (curr == head) {
-			head = curr->next;
-			delete(curr);
+	ListNode* middleNode(ListNode* head) {
+		if (head == NULL) {
 			return head;
 		}
-		prev->next = curr->next;
-		delete(curr);
-		return head;
+
+		ListNode* slow = head;
+		ListNode* fast = head;
+		while (fast != NULL && fast->next != NULL) {
+			slow = slow->next;
+			fast = fast->next->next;
+		}
+		return slow;
 	}
 };
 
@@ -65,4 +51,4 @@ int main() {
 	Solution s;
 	return 0;
 }
-#endif
+#endifs

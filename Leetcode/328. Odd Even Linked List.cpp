@@ -31,31 +31,22 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
-		if (head->next == NULL) {
-			return NULL;
-		}
-		ListNode* temp = head;
-		ListNode* curr = NULL;
-		ListNode* prev = NULL;
-		int count = 0;
-		while (count < n) {
-			count++;
-			temp = temp->next;
-		}
-		curr = head;
-		while (temp != NULL) {
-			temp = temp->next;
-			prev = curr;
-			curr = curr->next;
-		}
-		if (curr == head) {
-			head = curr->next;
-			delete(curr);
+	ListNode* oddEvenList(ListNode* head) {
+		if (head == NULL || head->next == NULL) {
 			return head;
 		}
-		prev->next = curr->next;
-		delete(curr);
+		ListNode* odd = head;
+		ListNode* even = head->next;
+		ListNode* evenStart = head->next;
+		while (even != NULL && even->next != NULL) {
+			odd->next = even->next;
+			even->next = even->next->next;
+
+			odd = odd->next;
+			even = even->next;
+		}
+
+		odd->next = evenStart;
 		return head;
 	}
 };
@@ -65,4 +56,4 @@ int main() {
 	Solution s;
 	return 0;
 }
-#endif
+#endifs

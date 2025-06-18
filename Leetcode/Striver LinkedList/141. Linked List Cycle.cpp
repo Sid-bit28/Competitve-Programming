@@ -31,32 +31,21 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
-		if (head->next == NULL) {
-			return NULL;
+	bool hasCycle(ListNode *head) {
+		if (head == NULL) {
+			return false;
 		}
-		ListNode* temp = head;
-		ListNode* curr = NULL;
-		ListNode* prev = NULL;
-		int count = 0;
-		while (count < n) {
-			count++;
-			temp = temp->next;
+
+		ListNode* slow = head;
+		ListNode* fast = head;
+		while (fast->next != NULL && fast->next->next != NULL) {
+			fast = fast->next->next;
+			slow = slow->next;
+			if (slow == fast) {
+				return true;
+			}
 		}
-		curr = head;
-		while (temp != NULL) {
-			temp = temp->next;
-			prev = curr;
-			curr = curr->next;
-		}
-		if (curr == head) {
-			head = curr->next;
-			delete(curr);
-			return head;
-		}
-		prev->next = curr->next;
-		delete(curr);
-		return head;
+		return false;
 	}
 };
 

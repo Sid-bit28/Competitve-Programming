@@ -31,32 +31,38 @@ int const MOD = 1000000007;
 
 class Solution {
 public:
-	ListNode* removeNthFromEnd(ListNode* head, int n) {
+	bool isPalindrome(ListNode* head) {
 		if (head->next == NULL) {
-			return NULL;
+			return true;
 		}
-		ListNode* temp = head;
-		ListNode* curr = NULL;
+
+		ListNode* slow = head;
+		ListNode* fast = head;
+		while (fast != NULL && fast->next != NULL) {
+			fast = fast->next->next;
+			slow = slow->next;
+		}
+
 		ListNode* prev = NULL;
-		int count = 0;
-		while (count < n) {
-			count++;
-			temp = temp->next;
+		while (slow != NULL) {
+			ListNode* nxt = slow->next;
+			slow->next = prev;
+			prev = slow;
+			slow = nxt;
 		}
-		curr = head;
-		while (temp != NULL) {
-			temp = temp->next;
-			prev = curr;
-			curr = curr->next;
+
+		//prev is the head of the later half
+
+		fast = head;
+		while (prev != NULL) {
+			// cout << prev->val << " " << fast->val << endl;
+			if (fast->val != prev->val) {
+				return false;
+			}
+			prev = prev->next;
+			fast = fast->next;
 		}
-		if (curr == head) {
-			head = curr->next;
-			delete(curr);
-			return head;
-		}
-		prev->next = curr->next;
-		delete(curr);
-		return head;
+		return true;
 	}
 };
 
