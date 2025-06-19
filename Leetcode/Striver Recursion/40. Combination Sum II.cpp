@@ -30,38 +30,36 @@ bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
 
 int const MOD = 1000000007;
 
-// Code here...
 class Solution {
 public:
-	vector<vector<string>> partition(string s) {
-		int n = sz(s);
+	vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+		int n = sz(candidates);
 
-		auto check_palindrome = [&](string temp)->bool{
-			string tempp = temp;
-			reverse(all(tempp));
-			return temp == tempp;
-		};
+		vector<vector<int>> ans;
+		vector<int> temp;
 
-		vector<string> foo;
-		vector<vector<string>> ans;
-		auto rec = [&](auto && rec, int pos, string temp)->void{
+		auto rec = [&](auto && rec, int pos, int tot)->void{
+			if (tot > target) {
+				return;
+			}
 			if (pos == n) {
-				if (temp == "") {
-					ans.pb(foo);
+				if (tot == target) {
+					ans.pb(temp);
 				}
 				return;
 			}
 
-			temp.pb(s[pos]);
-			rec(rec, pos + 1, temp);
-			if (check_palindrome(temp)) {
-				foo.pb(temp);
-				rec(rec, pos + 1, "");
-				foo.pop_back();
+			temp.pb(candidates[pos]);
+			rec(rec, pos + 1, tot + candidates[pos]);
+			temp.pop_back();
+			while (pos + 1 < n && candidates[pos + 1] == candidates[pos]) {
+				pos++;
 			}
+			rec(rec, pos + 1, tot);
 			return;
 		};
-		rec(rec, 0, "");
+		sort(all(candidates));
+		rec(rec, 0, 0);
 		return ans;
 	}
 };

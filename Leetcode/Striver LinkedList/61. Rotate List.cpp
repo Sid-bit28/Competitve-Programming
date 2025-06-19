@@ -2,7 +2,6 @@
 using namespace std;
 #define F first
 #define S second
-#define pb push_back
 #define EB emplace_back
 #define all(x) std::begin(x), std::end(x)
 #define sz(x) (int)(x).size()
@@ -22,47 +21,63 @@ template <class T> void dbs(string str, T t) {cerr << str << " : " << t << "\n";
 template <class T, class... S> void dbs(string str, T t, S... s) {int idx = str.find(','); cerr << str.substr(0, idx) << " : " << t << ","; dbs(str.substr(idx + 1), s...);}
 template <class T> void prc(T a, T b) {cerr << "["; for (T i = a; i != b; ++i) {if (i != a) cerr << ", "; cerr << *i;} cerr << "]\n";}
 
-typedef long long lli;
-typedef pair<lli, lli> ii;    typedef vector<lli> vi;
+typedef long long big;
+typedef pair<big, big> ii;    typedef vector<big> vi;
 typedef vector<ii> vii;       typedef vector<vi> graph;
 bool ckmax(auto &a, auto const& b) {return b > a ? a = b, 1 : 0;}
 bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
 
 int const MOD = 1000000007;
 
-// Code here...
 class Solution {
 public:
-	vector<vector<string>> partition(string s) {
-		int n = sz(s);
+	ListNode* rotateRight(ListNode* head, int k) {
+		if (head == NULL) {
+			return head;
+		}
 
-		auto check_palindrome = [&](string temp)->bool{
-			string tempp = temp;
-			reverse(all(tempp));
-			return temp == tempp;
-		};
+		ListNode* lenTemp = head;
+		int len = 0;
+		while (lenTemp != NULL) {
+			len++;
+			lenTemp = lenTemp->next;
+		}
 
-		vector<string> foo;
-		vector<vector<string>> ans;
-		auto rec = [&](auto && rec, int pos, string temp)->void{
-			if (pos == n) {
-				if (temp == "") {
-					ans.pb(foo);
-				}
-				return;
-			}
+		k %= len;
 
-			temp.pb(s[pos]);
-			rec(rec, pos + 1, temp);
-			if (check_palindrome(temp)) {
-				foo.pb(temp);
-				rec(rec, pos + 1, "");
-				foo.pop_back();
-			}
-			return;
-		};
-		rec(rec, 0, "");
-		return ans;
+		ListNode* dummy = new ListNode(-1);
+		dummy->next = head;
+
+		int count = 0;
+		ListNode* temp = dummy;
+		while (temp != NULL && count < k) {
+			count++;
+			temp = temp->next;
+		}
+
+		if (temp == NULL) {
+			ListNode* result = dummy->next;
+			delete(dummy);
+			return result;
+		}
+
+		ListNode* newTemp = dummy;
+
+		while (temp->next != NULL) {
+			newTemp = newTemp->next;
+			temp = temp->next;
+		}
+
+		if (newTemp->next == NULL) {
+			return head;
+		}
+
+		if (temp != NULL)temp->next = dummy->next;
+		dummy->next = newTemp->next;
+		newTemp->next = NULL;
+		ListNode* result = dummy->next;
+		delete(dummy);
+		return result;
 	}
 };
 

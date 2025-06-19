@@ -33,35 +33,35 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<vector<string>> partition(string s) {
-		int n = sz(s);
+	vector<string> letterCombinations(string digits) {
+		int n = sz(digits);
 
-		auto check_palindrome = [&](string temp)->bool{
-			string tempp = temp;
-			reverse(all(tempp));
-			return temp == tempp;
-		};
+		map<char, string> mp;
+		mp['2'] = "abc";
+		mp['3'] = "def";
+		mp['4'] = "ghi";
+		mp['5'] = "jkl";
+		mp['6'] = "mno";
+		mp['7'] = "pqrs";
+		mp['8'] = "tuv";
+		mp['9'] = "wxyz";
 
-		vector<string> foo;
-		vector<vector<string>> ans;
-		auto rec = [&](auto && rec, int pos, string temp)->void{
+		vector<string> ans;
+		string temp;
+		auto rec = [&](auto && rec, int pos)->void{
 			if (pos == n) {
-				if (temp == "") {
-					ans.pb(foo);
-				}
+				if (sz(temp))ans.pb(temp);
 				return;
 			}
 
-			temp.pb(s[pos]);
-			rec(rec, pos + 1, temp);
-			if (check_palindrome(temp)) {
-				foo.pb(temp);
-				rec(rec, pos + 1, "");
-				foo.pop_back();
+			for (auto &x : mp[digits[pos]]) {
+				temp.pb(x);
+				rec(rec, pos + 1);
+				temp.pop_back();
 			}
 			return;
 		};
-		rec(rec, 0, "");
+		rec(rec, 0);
 		return ans;
 	}
 };
