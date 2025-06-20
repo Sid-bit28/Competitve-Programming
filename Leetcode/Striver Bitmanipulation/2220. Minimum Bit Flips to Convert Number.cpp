@@ -33,18 +33,12 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<int> AllPrimeFactors(int N) {
-		vector<int> ans;
-		for (int i = 2; i * i <= N; i++) {
-			if (N % i == 0) {
-				ans.pb(i);
-				while (N % i == 0) {
-					N /= i;
-				}
+	int minBitFlips(int start, int goal) {
+		int ans = 0;
+		rep(bit, 0, 31) {
+			if ((start >> bit & 1) != (goal >> bit & 1)) {
+				ans++;
 			}
-		}
-		if (N > 1) {
-			ans.pb(N);
 		}
 		return ans;
 	}

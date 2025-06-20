@@ -33,18 +33,18 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<int> AllPrimeFactors(int N) {
-		vector<int> ans;
-		for (int i = 2; i * i <= N; i++) {
-			if (N % i == 0) {
-				ans.pb(i);
-				while (N % i == 0) {
-					N /= i;
+	vector<vector<int>> subsets(vector<int>& nums) {
+		int n = sz(nums);
+		int val = (1 << n);
+		vector<vector<int>> ans;
+		rep(i, 0, val) {
+			vector<int> temp;
+			rep(bit, 0, 31) {
+				if (i >> bit & 1) {
+					temp.pb(nums[bit]);
 				}
 			}
-		}
-		if (N > 1) {
-			ans.pb(N);
+			ans.pb(temp);
 		}
 		return ans;
 	}

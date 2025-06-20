@@ -33,19 +33,40 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<int> AllPrimeFactors(int N) {
-		vector<int> ans;
-		for (int i = 2; i * i <= N; i++) {
-			if (N % i == 0) {
-				ans.pb(i);
-				while (N % i == 0) {
-					N /= i;
+	vector<vector<string>> solveNQueens(int n) {
+		vector<int> row(n);
+
+		auto check = [&](int col, int currRow)->bool{
+			rep(prow, 0, currRow) {
+				if (row[prow] == col || (abs(col - row[prow]) == abs(currRow - prow))) {
+					return false;
 				}
 			}
-		}
-		if (N > 1) {
-			ans.pb(N);
-		}
+			return true;
+		};
+
+		vector<vector<string>> ans;
+		auto rec = [&](auto && rec, int currRow)->void{
+			if (currRow == n) {
+				vector<string> temp;
+				rep(prow, 0, n) {
+					string s(n, '.');
+					s[row[prow]] = 'Q';
+					temp.push_back(s);
+				}
+				ans.pb(temp);
+				return;
+			}
+
+			rep(col, 0, n) {
+				if (check(col, currRow)) {
+					row[currRow] = col;
+					rec(rec, currRow + 1);
+				}
+			}
+			return;
+		};
+		rec(rec, 0);
 		return ans;
 	}
 };

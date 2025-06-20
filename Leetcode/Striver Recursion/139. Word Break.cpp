@@ -33,22 +33,37 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<int> AllPrimeFactors(int N) {
-		vector<int> ans;
-		for (int i = 2; i * i <= N; i++) {
-			if (N % i == 0) {
-				ans.pb(i);
-				while (N % i == 0) {
-					N /= i;
+	bool wordBreak(string s, vector<string>& wordDict) {
+		int n = sz(s);
+
+		map<string, int> mp;
+		for (auto &x : wordDict) {
+			mp[x]++;
+		}
+
+		vector<int> dp(n, -1);
+		auto rec = [&](auto && rec, int pos)->bool{
+			if (pos == n) {
+				return true;
+			}
+			if (dp[pos] != -1) {
+				return dp[pos];
+			}
+			bool ans = false;
+			string temp;
+			rep(i, pos, n) {
+				temp.push_back(s[i]);
+				if (mp.find(temp) != mp.end()) {
+					ans |= rec(rec, i + 1);
 				}
 			}
-		}
-		if (N > 1) {
-			ans.pb(N);
-		}
+			return dp[pos] = ans;
+		};
+		bool ans = rec(rec, 0);
 		return ans;
 	}
 };
+
 
 #ifdef LOCAL
 int main() {

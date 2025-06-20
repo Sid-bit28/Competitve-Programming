@@ -33,20 +33,23 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<int> AllPrimeFactors(int N) {
-		vector<int> ans;
-		for (int i = 2; i * i <= N; i++) {
-			if (N % i == 0) {
-				ans.pb(i);
-				while (N % i == 0) {
-					N /= i;
-				}
-			}
-		}
-		if (N > 1) {
-			ans.pb(N);
-		}
-		return ans;
+	int findXOR(int l, int r) {
+		int valr = 0, vall = 0;
+		if (r % 4 == 0) {
+			valr = r;
+		} else if (r % 4 == 1) {
+			valr = 1;
+		} else if (r % 4 == 2) {
+			valr = r + 1;
+		} else valr = 0;
+		if (l % 4 == 0) {
+			vall = l;
+		} else if (l % 4 == 1) {
+			vall = 1;
+		} else if (l % 4 == 2) {
+			vall = l + 1;
+		} else vall = 0;
+		return valr ^ vall ^ l;
 	}
 };
 

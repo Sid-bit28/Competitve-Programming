@@ -33,26 +33,58 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	vector<int> AllPrimeFactors(int N) {
-		vector<int> ans;
-		for (int i = 2; i * i <= N; i++) {
-			if (N % i == 0) {
-				ans.pb(i);
-				while (N % i == 0) {
-					N /= i;
+	bool exist(vector<vector<char>> &board, string word) {
+		int n = sz(board);
+		int m = sz(board[0]);
+
+		int dx[4] = { -1, 1, 0, 0};
+		int dy[4] = {0, 0, -1, 1};
+
+		vector<vector<int>> vis;
+
+		auto check = [&](int i, int j)->bool{
+			if (i >= 0 && i < n && j >= 0 && j < m && vis[i][j] == false) {
+				return true;
+			}
+			return false;
+		};
+
+		auto rec = [&](auto && rec, int pos, int i, int j)->bool{
+			if (pos == sz(word)) {
+				return true;
+			}
+
+			vis[i][j] = true;
+			bool ans = false;
+			rep(dir, 0, 4) {
+				int ni = i + dx[dir];
+				int nj = j + dy[dir];
+				if (check(ni, nj) && word[pos] == board[ni][nj]) {
+					ans |= rec(rec, pos + 1, ni, nj);
+				}
+			}
+			vis[i][j] = false;
+			return ans;
+		};
+
+		rep(i, 0, n) {
+			rep(j, 0, m) {
+				if (board[i][j] == word[0]) {
+					vis = vector<vector<int>> (n, vector<int>(m, false));
+					if (rec(rec, 1, i, j)) {
+						return true;
+					}
 				}
 			}
 		}
-		if (N > 1) {
-			ans.pb(N);
-		}
-		return ans;
+		return false;
 	}
 };
 
 #ifdef LOCAL
 int main() {
 	Solution s;
+	// cout << s.exist({{'A', 'B', 'C', 'E'}, {'S', 'F', 'E', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCESEEEFS") << endl;
 	return 0;
 }
 #endif
