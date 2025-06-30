@@ -21,7 +21,7 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	int largestRectangleArea(vector<int> heights) {
+	int largestRectangleArea(vector<int>& heights) {
 		int n = heights.size();
 		vector<int> nextSmaller(n, -1);
 		vector<int> st;
@@ -49,9 +49,6 @@ public:
 				st.push_back(i);
 			}
 		}
-		pr(heights);
-		pr(prevSmaller);
-		pr(nextSmaller);
 		lli ans = 0;
 		for (int i = 0; i < n; i++) {
 			lli val = 0;
@@ -64,18 +61,17 @@ public:
 			} else {
 				val += heights[i] * (nextSmaller[i] - prevSmaller[i] - 1);
 			}
-			pr(i, val);
 			ans = max(ans, val);
 		}
 		return ans;
 	}
 };
 
-// #ifdef LOCAL
+#ifdef LOCAL
 int main() {
 	Solution s;
-	cout << s.largestRectangleArea({2, 1, 5, 6, 2, 3}) << endl;
-	cout << s.largestRectangleArea({2, 4}) << endl;
+	// cout << s.largestRectangleArea({2, 1, 5, 6, 2, 3}) << endl;
+	// cout << s.largestRectangleArea({2, 4}) << endl;
 	return 0;
 }
-// #endif
+#endif

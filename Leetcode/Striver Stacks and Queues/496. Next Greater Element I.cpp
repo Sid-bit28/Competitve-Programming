@@ -2,6 +2,7 @@
 using namespace std;
 #define F first
 #define S second
+#define pb push_back
 #define EB emplace_back
 #define all(x) std::begin(x), std::end(x)
 #define sz(x) (int)(x).size()
@@ -29,16 +30,39 @@ bool ckmin(auto &a, auto const& b) {return b < a ? a = b, 1 : 0;}
 
 int const MOD = 1000000007;
 
+// Code here...
 class Solution {
 public:
-	void FunctionDaaloYahan(void) {
-
-	}
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int m = nums2.size();
+        map<int, int> mp;
+        for (int i = 0; i < n; i++) {
+            mp[nums1[i]] = i;
+        }
+        vector<int> ans(n, -1);
+        vector<int> st;
+        for (int i = 0; i < m; i++) {
+            if (st.empty()) {
+                st.push_back(nums2[i]);
+            } else {
+                while (!st.empty() && st.back() < nums2[i]) {
+                    if (mp.find(st.back()) != mp.end()) {
+                        ans[mp[st.back()]] = nums2[i];
+                    }
+                    st.pop_back();
+                }
+                st.push_back(nums2[i]);
+            }
+        }
+        return ans;
+    }
 };
 
-// #ifdef LOCAL
+
+#ifdef LOCAL
 int main() {
-	Solution s;
-	return 0;
+    Solution s;
+    return 0;
 }
-// #endif
+#endif

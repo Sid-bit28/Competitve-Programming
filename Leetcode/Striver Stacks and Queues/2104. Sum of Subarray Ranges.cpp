@@ -21,61 +21,77 @@ int const MOD = 1000000007;
 // Code here...
 class Solution {
 public:
-	int largestRectangleArea(vector<int> heights) {
-		int n = heights.size();
-		vector<int> nextSmaller(n, -1);
+	long long subArrayRanges(vector<int>& nums) {
+		int n = nums.size();
+		vector<int> nextBigger(n, -1);
 		vector<int> st;
 		for (int i = 0; i < n; i++) {
 			if (st.empty()) {
 				st.push_back(i);
 			} else {
-				while (!st.empty() && heights[st.back()] > heights[i]) {
+				while (!st.empty() && nums[st.back()] < nums[i]) {
+					nextBigger[st.back()] = i;
+					st.pop_back();
+				}
+				st.push_back(i);
+			}
+		}
+		vector<int> nextSmaller(n, -1);
+		st.clear();
+		for (int i = 0; i < n; i++) {
+			if (st.empty()) {
+				st.push_back(i);
+			} else {
+				while (!st.empty() && nums[st.back()] > nums[i]) {
 					nextSmaller[st.back()] = i;
 					st.pop_back();
 				}
 				st.push_back(i);
 			}
 		}
+		vector<int> prevBigger(n, -1);
 		st.clear();
-		vector<int> prevSmaller(n, -1);
-		for (int i = n - 1; i >= 0; i--) {
+		for (int i = n - 1; i >= 0 ; i--) {
 			if (st.empty()) {
 				st.push_back(i);
 			} else {
-				while (!st.empty() && heights[st.back()] > heights[i]) {
+				while (!st.empty() && nums[st.back()] <= nums[i]) {
+					prevBigger[st.back()] = i;
+					st.pop_back();
+				}
+				st.push_back(i);
+			}
+		}
+		vector<int> prevSmaller(n, -1);
+		st.clear();
+		for (int i = n - 1; i >=  0; i--) {
+			if (st.empty()) {
+				st.push_back(i);
+			} else {
+				while (!st.empty() && nums[st.back()] >= nums[i]) {
 					prevSmaller[st.back()] = i;
 					st.pop_back();
 				}
 				st.push_back(i);
 			}
 		}
-		pr(heights);
-		pr(prevSmaller);
-		pr(nextSmaller);
 		lli ans = 0;
 		for (int i = 0; i < n; i++) {
-			lli val = 0;
-			if (nextSmaller[i] == -1 && prevSmaller[i] == -1) {
-				val += heights[i] * n;
-			} else if (nextSmaller[i] != -1 && prevSmaller[i] == -1) {
-				val += heights[i] * nextSmaller[i];
-			} else if (nextSmaller[i] == -1 && prevSmaller[i] != -1) {
-				val += heights[i] * (n - prevSmaller[i] - 1);
-			} else {
-				val += heights[i] * (nextSmaller[i] - prevSmaller[i] - 1);
-			}
-			pr(i, val);
-			ans = max(ans, val);
+			lli leftMin = i - prevSmaller[i];
+			lli rightMin = (nextSmaller[i] == -1 ? n : nextSmaller[i]) - i;
+			lli leftMax = i - prevBigger[i];
+			lli rightMax = (nextBigger[i] == -1 ? n : nextBigger[i]) - i;
+
+			ans += nums[i] * (leftMax * rightMax - leftMin * rightMin);
 		}
 		return ans;
 	}
 };
 
-// #ifdef LOCAL
+#ifdef LOCAL
 int main() {
 	Solution s;
-	cout << s.largestRectangleArea({2, 1, 5, 6, 2, 3}) << endl;
-	cout << s.largestRectangleArea({2, 4}) << endl;
+	// cout << s.subArrayRanges({1, 2, 3}) << endl;
 	return 0;
 }
-// #endif
+#endif
